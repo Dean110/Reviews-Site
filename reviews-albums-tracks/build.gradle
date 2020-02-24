@@ -1,27 +1,35 @@
-apply plugin: 'eclipse'
-apply plugin: 'java'
-
-repositories {
-	jcenter()
+plugins {
+	id 'org.springframework.boot' version '2.2.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
 }
 
-dependencies {
-	testCompile 'junit:junit:4.+',
-		'org.hamcrest:hamcrest-core:1.+',
-		'org.hamcrest:hamcrest-library:1.+',
-		'org.mockito:mockito-core:2.+',
-		'org.assertj:assertj-core:3.+'
-}
+group = 'reviews'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
 
-task buildSrcFolders {
-
-	description 'Builds default source folders'
-
-	doLast {
-		mkdir("src/main/java")
-		mkdir("src/test/java")
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
 	}
 }
 
-tasks.eclipse.dependsOn buildSrcFolders
+repositories {
+	mavenCentral()
+}
 
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}
